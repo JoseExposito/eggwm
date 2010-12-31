@@ -1,4 +1,4 @@
-== Users: ==
+== Users ==
 
  * [http://code.google.com/p/eggwm/wiki/EggWMConfig Configuration]
 
