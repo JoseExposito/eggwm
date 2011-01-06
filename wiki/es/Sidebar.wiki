@@ -1,8 +1,0 @@
-== Usuarios ==
-
- * [http://code.google.com/p/eggwm/wiki/EggWMConfig Configuración]
-
-== Desarrolladores ==
-
- * [http://code.google.com/p/eggwm/wiki/ICCCM ICCCM]
- * [http://code.google.com/p/eggwm/wiki/EWMH EWMH]  

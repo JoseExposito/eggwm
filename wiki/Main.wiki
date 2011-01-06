@@ -1,7 +1,0 @@
-EggWm is a window manager based on Xlib and Qt4.
-
-The EggWM objectives are:
-  * Maintain a simple and well documented source code.
-  * Being 100% compatible with the EWMH and ICCCM standards.
-  * Maintain low resource consumption.
-  * In the future, allow to manage windows through gestures, with either a trackpad or a touchscreen.
