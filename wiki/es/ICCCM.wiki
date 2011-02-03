@@ -1,0 +1,128 @@
+= Introducción =
+
+Uno de los principales objetivos de Egg Window Manager es implementar totalmente todos los estándares que un buen gestor
+de ventanas debería cumplir.
+En esta página podrá ver el estado de la implementación actual del estándar ICCCM en la rama de desarrollo
+de Egg Window Manager (repositorio SVN).
+
+
+= Documentación =
+
+Si es usted desarrollador y está interesado en colaborar implementando o mejorando alguno de estos estándares le puede
+resultar útil esta documentación:
+
+[http://www.sbin.org/doc/Xlib/chapt_12.html]
+
+[http://tronche.com/gui/x/icccm/sec-4.html#s-4]
+
+
+
+= Implementación actual de los estándares ICCCM =
+
+La obtención de todas estas propiedades está implementada en la clase _src/eggwm/standards/ICCCM.h_
+
+
+*Propiedades establecidas por los clientes a las que obedece EggWM*
+
+ * *WM_NAME*
+ Nombre del cliente, que se mostrará en el marco del mismo, en caso de que este requiera ser decorado por el gestor de ventanas.
+ Cuando se llama a XWindow::setState() para pasar de !WithdrawnState a !NormalState o !IconicState (normalmente desde el evento !MapRequest)
+ se le pone como título al marco este valor, devuelto por ICCCM::getTitle().
+
+ * *WM_ICON_NAME*
+ Nombre del icono. Típicamente este valor se muestra junto con el icono del cliente cuando este está minimizado, sin embargo EggWM
+ no lo utiliza, por lo que este hint no está implementado.
+ Un código muy simple para obtener esta propiedad es:
+ {{{
+QString ICCCM::getIconName() const {
+    XTextProperty textProperty;
+    XGetWMIconName(QX11Info::display(), this->clientID, &textProperty);
+    return this->textPropertyToQString(textProperty);
+}
+ }}}
+
+ * *WM_NORMAL_HINTS*
+ Este hint se puede dividir en varias propiedades:
+  * *Tamaños mínimo y máximo*
+  Tamaños mínimo y máximo que acepta el cliente.
+  Cada vez que se quiere redimensionar una ventana estirándola por sus bordes, se llama al slot XWindow::resizedFrame(),
+  que llamando a ICCCM::getMinWidth(), ICCCM::getMinHeight(), ICCCM::getMaxWidth() y ICCCM::getMaxHeight() la redimensiona si está
+  entre dichos tamaños.
+  * *Posición inicial*
+  Posición inicial del cliente la primera vez que se hace visible.
+  Cuando se llama a XWindow::setState() para pasar de !WithdrawnState a !NormalState o !IconicState (normalmente desde el evento !MapRequest)
+  se comprueba si el cliente tiene que ser colocado en alguna parte de la pantalla llamando a ICCCM::overridePositionHints() y de ser
+  así se coloca en la posición que indica ICCCM::getInitialPosition().
+  * *Tamaños que acepta el cliente*
+  Algunos clientes no aceptan cualquier tamaño, por ejemplo _xterm_ solo acepta tamaños que sean múltiplos de el tamaño de letra usado,
+  o la barra de herramientas de _GIMP_ solo acepta tamaños múltiplos del tamaño de sus iconos.
+  Por ello, cada vez que se llama a Client::setWidth() o Client::setHeight(), en vez de establecer como tamaño de la ventana el indicado,
+  se establece el resultado de llamar a ICCCM::roundWidth() o ICCCM::roundHeight() según corresponda.
+
+ * *WM_HINTS*
+ Este hint se puede dividir en varias propiedades:
+  * *Estado inicial del cliente*
+  Estado inicial del cliente (normal o minimizado) la primera vez que se hace visible.
+  Cuando se llama a XWindow::setState() para pasar de !WithdrawnState a !NormalState o !IconicState (normalmente desde el evento !MapRequest)
+  se llama a ICCCM::getInitialState() para saber si el estado inicial del cliente es !NormalState o !IconicState.
+  * *Grupo al que pertenece el cliente*
+  ICCCM::getWindowGroup() devuelve el grupo al que pertenece el cliente. EggWM no gestiona los grupos directamente, espera que un programa
+  externo, por ejemplo un panel con la lista de ventanas, se encargue de agruparlas según corresponda.
+  * *Icono del cliente*
+  Icono visible o no, según se especifique en el tema usado por EggWM, que estará en la barra de título de cada ventana.
+  Al añadir un marco a un cliente desde el método XWindow::addFrame() se llama a ClientFrame::setIconPixmap() con el icono devuelto
+  por ICCCM::getIconPixmap().
+  * *Asignación del foco al cliente*
+  Cada vez que se pulsa sobre una ventana, se lanza un evento ButtonPress, desde el que se llama a ICCCM::setFocus(), que asigna el
+  foco al ciente si así lo requiere.
+  También se le asigna el foco a la ventana cuando se mapea (evento MapRequest).
+  Ver WM_PROTOCOLS - WM_TAKE_FOCUS.
+
+ * *WM_PROTOCOLS*
+ El estándar ICCCM establece dos protocolos:
+  * *WM_TAKE_FOCUS*
+  Similar al punto WM_HINTS - Asignación del foco al cliente.
+  * *WM_DELETE_WINDOW*
+  Cuando se quiere cerrar una ventana pulsando en el botón _cerrar_ de su marco, se llama al slot XWindow::closedFrame(), que llama
+  a su vez a ICCCM::killClient(), que destruirá el cliente haciendo uso de este protocolo.
+
+ * *WM_TRANSIENT_FOR*
+ Este hint no está implementado, ya que EggWM no decora ni trata de forma especial a las ventanas que establecen esta propiedad,
+ típicamente diálogos.
+
+ * *WM_COLORMAP_WINDOWS*
+ Este hint no está implementado.
+
+ * *WM_CLIENT_MACHINE y WM_COMMAND*
+ Estas propiedades son necesarias para llevar a cabo funciones de un session manager, por lo que EggWM no las implementa.
+ WM_COMMAND contiene la orden con la que se lanza la aplicación (junto con todos sus parámetros) para así poder restaurar la
+ aplicación si es necesario.
+ WM_CLIENT_MACHINE contiene el nombre del equipo donde se ejecuta el cliente.
+
+*Propiedades establecidas por EggWM a las que deben obedeer los cleintes*
+
+ * *WM_STATE*
+ El gestor de ventanas debe poner en la ventana de nivel superior de cada aplicación el estado en el que se encuentra la misma:
+ !WithdrawnState, !NormalState o !IconicState.
+ Cuando se llama a XWindow::setState() se lleva a cabo esta operación llamando a Client::changeWmState()
+
+ * *WM_ICON_SIZE*
+ Establece una lista de tamaños de icono aceptados por el gestor de ventas, en el caso de Egg Window Manager este tamaño viene definido
+ por el tema utilizado.
+ Cuando se crea un cliente (en la constructora de Client) se llama a ICCCM::setIconSizes() que lo implementa.
+
+
+= Por implementar =
+
+Las siguientes propiedades aun necesitan ser implementadas:
+
+ * WM_NORMAL_HINTS - min_aspect y max_aspect.
+ * WM_HINTS - ICCCM::getIconPixmap(): Faltan por implementar los iconos del tipo icon_window.
+
+
+= Bugs conocidos =
+
+A continuación se muestra una lista de los bugs conocidos pendientes de resolver. Por favor, si detecta algún otro problema no
+dude en reportarlo.
+
+ * Por el momento no hay bugs conocidos.
