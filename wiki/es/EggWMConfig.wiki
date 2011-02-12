@@ -1,0 +1,51 @@
+= Introducción =
+
+Egg Window Manager utiliza ciertos archivos para su configuración. En esta página aprenderá cuales son estos archivos y como configurarlos.
+
+
+
+= Carpetas usadas por EggWM =
+
+ * *~/.eggwm*
+ Contiene un archivo _eggwm.conf_ con información básica para configurar el gestor de ventanas.
+ El contenido de este archivo se describirá más adelante.
+
+ * *~/.eggwm/themes*
+ Carpeta que contiene los distintos temas para decorar las ventanas instalados por el gestor de ventanas.
+ Cada tema está contenido dentro de una carpeta con su mismo nombre, que contiene los archivos _style.qss_, _theme.info_
+ y otros recursos requeridos por el tema, como pueden ser las imágenes.
+
+
+
+= Archivos usados por EggWM =
+
+ * *~/.eggwm/eggwm.conf*
+ Este archivo contiene la información sobre el tema que utiliza EggWM. Tiene la siguiente estructura:
+{{{
+[theme]
+name=Nombre del tema para decorar ventanas
+}}}
+ Tener en cuenta que el tema debe estar correctamente colocado en su carpeta correspondiente.
+
+ * *~/.eggwm/themes/style.qss y ~/.eggwm/themes/theme.info*
+ Archivos de configuración del tema, ver la sección correspondiente para ver su contenido.
+
+
+
+= Ejemplo de configuración =
+
+A continuación se muestra un ejemplo de como podría estar estructurado el árbol de directorios para un correcto funcionamiento de EggWM:
+
+ * ~/.eggwm
+  * eggwm.conf
+  * themes
+   * tema1
+    * ...
+   * tema2
+    * ...
+
+Si, por ejemplo, se quisiera usar el tema de ventanas _tema2_ el archivo _eggwm.conf_ tendría el siguiente aspecto:
+{{{
+[theme]
+name=tema2
+}}}
