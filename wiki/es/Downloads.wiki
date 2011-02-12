@@ -1,0 +1,25 @@
+#sidebar
+
+ * *Egg Window Manager v0.2:*
+
+ [http://eggwm.googlecode.com/files/eggwm_0.2-ubuntu10.10_i386.deb - Descargar paquete DEB para Ubuntu 10.10 (i386)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-opensuse11.3.i586.rpm - Descargar paquete RPM para OpenSuse 11.3 (i586)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-opensuse11.3.x86_64.rpm - Descargar paquete RPM para OpenSuse 11.3 (x86_64)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-20.1.i386.rpm - Descargar paquete RPM para Fedora 14 (i386)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-20.1.x86_64.rpm - Descargar paquete RPM para Fedora 14 (x86_64)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-20.1.i586.rpm - Descargar paquete RPM para Mandriva 2010.1 (i586)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2-mandriva2010.1.x86_64.rpm - Descargar paquete RPM para Mandriva 2010.1 (x86_64)]
+ [http://eggwm.googlecode.com/files/eggwm-0.2.tar.gz - Descargar código fuente]
+
+ * *Egg Window Manager v0.1:*
+
+ [http://eggwm.googlecode.com/files/eggwm-0.1.tar.gz - Descargar código fuente]
+
+<br/>
+<hr>
+<br/>
+
+Si quieres puedes hacer una donación para colaborar con el proyecto.... si no
+simplemente descarga lo que quieras, es gratis (y libre!)
+
+[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=FT2KS37PVG8PU&lc=US&item_name=Egg%20Software&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif] 

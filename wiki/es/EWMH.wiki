@@ -1,0 +1,154 @@
+= Introducción =
+
+Uno de los principales objetivos de Egg Window Manager es implementar totalmente todos los estándares que un buen gestor de ventanas
+debería cumplir.
+
+En esta página podrá ver el estado de la implementación actual del estándar EWMH, también conocido como NetWM, en la rama de
+desarrollo de Egg Window Manager (repositorio SVN).
+
+
+
+= Documentación =
+
+Si es usted desarrollador y está interesado en colaborar implementando o mejorando alguno de estos estándares le puede
+resultar útil esta documentación:
+[http://standards.freedesktop.org/wm-spec/latest/]
+
+
+= Implementación actual de los estándares EWMH =
+
+Para facilitar la implementación del estándar EWMH se ha dividido el mismo en dos:
+ * EWMH - Root: La primera parte se implementa en la clase _src/eggwm/standards/EWMHRoot.h_ y se encarga de enviar a la ventana raíz
+ (root window) una serie de propiedades que acepta EggWM.
+ * EWMH - Client: La segunda parte se implementa en la clase _src/eggwm/standards/EWMHClient.h_ y gestiona una serie de propiedades
+ extra de los clientes similares a las de ICCCM.
+
+== EWMH - Root ==
+
+ * *_NET_SUPPORTED*
+ Hints que soporta EggWM.
+ Se implementa en EWMHRoot::sendSupportedHints() y se llama desde EggWM::sendHints().
+
+ * *_NET_CLIENT_LIST*
+ EggWM mantiene dos listas de ventanas. Las dos contienen todas las ventanas que gestiona, pero se almacenan en distinto orden.
+  * _NET_CLIENT_LIST:
+  En esta lista se encuentran las ventanas ordenadas según se han ido mapeando.
+  Se implementa en EWMHRoot::sendMappingClientList() y se actualiza en los eventos MapRequest y DestroyNotify.
+  * _NET_CLIENT_LIST_STACKING:
+  En esta lista se encuentran las ventanas ordenadas según su orden en la pila, siendo la última la que se encuentra en la cima.
+  Se implementa en EWMHRoot::sendStackingClientList() y se actualiza en los eventos MapRequest, DestroyNotify y ButtonPress.
+
+ * *_NET_ACTIVE_WINDOW*
+ ID de la ventana activa.
+ Se implementa en EWMHRoot::sendActiveWindow() y .... =*TODO*=
+
+ * *_NET_SUPPORTING_WM_CHECK*
+ Para que los clientes sepan que hay un gestor de ventanas ejecutándose, EggWM envía a la ventana raíz el ID de una ventana
+ creada por él (clase WMCheckWindow).
+ Dicha ventana tiene que tener como _NET_WM_NAME "Egg Window Manager" y _NET_SUPPORTING_WM_CHECK con dicho ID.
+ Se implementa en EWMHRoot::sendSupportingWmCheck() y se llama desde EggWM::sendHints().
+
+ * *_NET_NUMBER_OF_DESKTOPS*
+ Número de escritorios disponibles, por el momento EggWM solo acepta un único escritorio.
+ Se implementa en EWMHRoot::sendNumberOfDesktops() y se llama desde EggWM::sendHints().
+
+ * *_NET_DESKTOP_NAMES*
+ Lista con el nombre de los distintos escritorios. Por el momento EggWM solo acepta un escritorio con nombre "EggWM".
+ Se implementa en EWMHRoot::sendDesktopNames() y se llama desde EggWM::sendHints().
+
+ * *_NET_DESKTOP_GEOMETRY*
+ Tamaño del escritorio. Como EggWM solo acepta un escritorio este tamaño será el tamaño total de la pantalla.
+ Se implementa en EWMHRoot::sendDesktopGeometry() y se llama desde EggWM::sendHints().
+
+ * *_NET_DESKTOP_VIEWPORT*
+ Si EggWM soportase varios escritorios, habría que indicar las coordenadas de la esquina superior izquierda del escritorio que se
+ esté estuviera utilizando.
+ Como EggWM solo acepta un escritorio se establecen las coordenadas (0,0).
+ Se implementa en EWMHRoot::sendDesktopViewport() y se llama desde EggWM::sendHints().
+
+ * *_NET_WORKAREA*
+ Tamaño del área "usable" del escritorio. Se calcula teniendo en cuenta el desktop viewport y el tamaño de los posibles paneles.
+ Este tamaño se utiliza, por ejemplo, para colocar correctamente los iconos en el escritorio.
+ Se implementa en EWMHRoot::sendWorkarea() y se llama desde EggWM::sendHints().
+
+ * *_NET_CURRENT_DESKTOP*
+ Indica cual es el escritorio que está en uso.
+ Se implementa en EWMHRoot::sendCurrentDesktop() y se llama desde EggWM::sendHints().
+
+ * *_NET_SHOWING_DESKTOP*
+ Indica si el WM acepta el modo "showing the desktop", en este modo todas las ventanas se ocultan dejando visible únicamente el escritorio.
+ Por el momento EggWM no soporta este modo.
+ Se implementa en EWMHRoot::sendSupportShowingdesktop() y se llama desde EggWM::sendHints().
+
+ * *_NET_VIRTUAL_ROOTS*
+ Egg Window Manager no implementa esta propiedad ya que no trabaja con virtual roots.
+
+ * *_NET_DESKTOP_LAYOUT*
+ El gestor de ventanas no es el encargado de establecer esta propiedad, se tiene que encargar de ello un paginador.
+
+
+
+
+
+== EWMH - Client ==
+
+ * *_NET_WM_NAME*
+ Título de la ventana, si está establecido, se usará en vez de WM_NAME.
+ Se implemta en EWMHClient::getTitle() y se llama desde Client::getTitle().
+
+ * *_NET_WM_VISIBLE_NAME*
+ En caso de estar definido se usará este título en vez de _NET_WM_NAME y WM_NAME.
+ Se implemta en EWMHClient::getVisibleTitle() y se llama desde Client::getTitle().
+
+ * *_NET_WM_ICON_NAME y _NET_WM_VISIBLE_ICON_NAME*
+ Al igual que WM_ICON_NAME estas propiedades no son usadas por EggWM, por lo que no están implementadas.
+
+ * *_NET_WM_DESKTOP*
+ Esta propiedad establece el escritorio en el que se debe mostrar un cliente. EggWM no la implementa ya que solo acepta un escritorio.
+
+ * *_NET_WM_WINDOW_TYPE*
+ Tipo de la ventana, si es un dock, un menú, etc.
+ Se implementa en EWMHClient::getWindowType() y se llama desde XWindow::addFrame() para saber si hay que decorar o no la ventana.
+
+ * *_NET_WM_STATE*
+ TODO
+
+ * *_NET_WM_ALLOWED_ACTIONS*
+ TODO
+
+ * *_NET_WM_STRUT y _NET_WM_STRUT_PARTIAL*
+ TODO
+
+ * *_NET_WM_ICON_GEOMETRY*
+ TODO
+
+ * *_NET_WM_ICON
+ Devuelve el icono de la aplicación, si esta propiedad está definida se usará en vez de el definido por el estándar ICCCM.
+ Se implementa en EWMHClient::getIconPixmap() y se llama desde Client::getIconPixmap().
+
+ * *_NET_WM_PID*
+ TODO
+
+ * *_NET_WM_HANDLED_ICONS*
+ TODO
+
+ * *_NET_WM_USER_TIME*
+ TODO
+
+ * *_NET_WM_USER_TIME_WINDOW*
+ TODO
+
+ * *_NET_FRAME_EXTENTS*
+ TODO
+
+= Por implementar =
+
+Las siguientes propiedades aun necesitan ser implementadas:
+
+ * Dar soporte a múltiples escritorios
+
+= Bugs conocidos =
+
+A continuación se muestra una lista de los bugs conocidos pendientes de resolver. Por favor, si detecta algún otro problema no dude en reportarlo.
+
+ * Por el momento no hay bugs conocidos.

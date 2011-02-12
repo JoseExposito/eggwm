@@ -1,0 +1,8 @@
+== Users ==
+
+ * [http://code.google.com/p/eggwm/wiki/EggWMConfig Configuration]
+
+== Developers ==
+
+ * [http://code.google.com/p/eggwm/wiki/ICCCM ICCCM]
+ * [http://code.google.com/p/eggwm/wiki/EWMH EWMH] 
