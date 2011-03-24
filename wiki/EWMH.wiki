@@ -1,0 +1,67 @@
+= Introduction =
+
+One of the main objectives of Egg Window Manager is to implement fully all the standards that a good window manager should comply.
+
+On this page you can view the status of the current implementation of EWMH standard, also known as NetWM, in the development branch of Egg Window Manager (SVN repository).
+
+
+
+= Documentation =
+
+If you are a developer and are interested in helping implementing or improving any of these standards this documentation can be useful:
+
+[http://standards.freedesktop.org/wm-spec/latest/]
+
+
+= Current implementation of standards EWMH =
+
+To facilitate the implementation of the standard EWMH it has been divided into two:
+
+ * EWMH - Root: The first part is implemented in the _src/eggwm/tandards/EWMHRoot.h_ class and then sends to the root window a series of properties that EggWM accept.
+
+
+ * EWMH - Client: The second part is implemented in _src/eggwm/standards/EWMHClient.h_ class and manages a number of properties extra properties similar to ICCCM.
+
+== EWMH - Root ==
+
+ * _NET_SUPPORTED
+
+ * _NET_CLIENT_LIST
+  * _NET_CLIENT_LIST
+  * _NET_CLIENT_LIST_STACKING
+
+ * _NET_ACTIVE_WINDOW
+
+ * _NET_SUPPORTING_WM_CHECK
+
+ * _NET_NUMBER_OF_DESKTOPS
+
+ * _NET_DESKTOP_NAMES
+
+ * _NET_DESKTOP_GEOMETRY
+
+ * _NET_DESKTOP_VIEWPORT
+
+ * _NET_WORKAREA
+
+ * _NET_CURRENT_DESKTOP
+
+ * _NET_SHOWING_DESKTOP
+
+ * _NET_VIRTUAL_ROOTS
+
+ * _NET_DESKTOP_LAYOUT
+
+
+== EWMH - Client ==
+
+ * _NET_WM_NAME
+
+ * _NET_WM_VISIBLE_NAME
+
+ * _NET_WM_DESKTOP
+
+ * _NET_WM_WINDOW_TYPE
+
+ * _NET_WM_ICON
+
