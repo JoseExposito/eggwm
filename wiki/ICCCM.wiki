@@ -10,7 +10,7 @@ If you are a developer and are interested in helping implementing or improving a
 
 [http://www.sbin.org/doc/Xlib/chapt_12.html]
 
-[http://tronche.com/gui/x/icccm/sec-4.html # s-4]
+[http://tronche.com/gui/x/icccm/sec-4.html#s-4]
 
 
 
