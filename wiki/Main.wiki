@@ -1,4 +1,6 @@
-﻿= What is Egg Window Manager? =
+﻿#sidebar Sidebar
+
+= What is Egg Window Manager? =
 
 EggWM is a  [http://es.wikipedia.org/wiki/X_Window_System X11] window manager written in C++ with the [http://qt.nokia.com/ Qt 4] libraries.
 
@@ -36,4 +38,3 @@ The EggWM objectives are:
   * Maintain a simple and well documented source code.
   * Being compatible with the freedesktop.org standards for window managers.
   * Maintain a low consumption of resources without neglecting the usability and appearance.
-
