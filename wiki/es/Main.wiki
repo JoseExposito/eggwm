@@ -1,4 +1,5 @@
-﻿= ¿Qué es Egg Window Manager? =
+﻿#sidebar Sidebar
+= ¿Qué es Egg Window Manager? =
 
 Egg Window Manager es un gestor de ventanas para [http://es.wikipedia.org/wiki/X_Window_System X11] escrito en C++ usando las librerías [http://qt.nokia.com/ Qt 4].
 

@@ -1,3 +1,5 @@
+#sidebar Sidebar
+
 = Introducción =
 
 Egg Window Manager utiliza ciertos archivos para su configuración. En esta página aprenderá cuales son estos archivos y como configurarlos.
